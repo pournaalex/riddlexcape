@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProgressBar from '../components/ProgressBar';
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://riddlexcape.onrender.com';
 
 // Define the initial state structure with only the Broken Calculator
 const INITIAL_GAME_PROGRESS = {
