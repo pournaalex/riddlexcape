@@ -4,10 +4,13 @@ const cors = require('cors');
 const app = express();
 const PORT = 5000;
 
+// --- IN-MEMORY STORAGE (Lost on server restart) ---
+const COMPLETION_RECORDS = []; 
+
 // Access Codes and corresponding game routes
 const ACCESS_CODES = {
-    // 'DOTS4LIFE': '/nine-dot', // REMOVED
-    'CALCFAIL': '/broken-calc' // Code to unlock the Broken Calculator
+    'CALCFAIL': '/broken-calc', // Code to unlock the Broken Calculator
+    'MATH-WIZ-BEEP': '/painted-cube'
 };
 
 // Middleware
@@ -28,6 +31,28 @@ app.post('/api/validate-code', (req, res) => {
         // Code is invalid
         res.status(401).json({ success: false, message: 'Invalid Access Code.' });
     }
+});
+
+// --- NEW API ROUTE for Submitting Final Score ---
+app.post('/api/submit-score', (req, res) => {
+    const { username, totalTime, finalScore } = req.body;
+
+    if (!username || !totalTime || finalScore === undefined) {
+        return res.status(400).json({ success: false, message: 'Missing submission data.' });
+    }
+
+    const record = {
+        username,
+        finalScore,
+        totalTime,
+        timestamp: new Date().toISOString()
+    };
+
+    COMPLETION_RECORDS.push(record);
+    console.log(`New Completion Record: ${username} finished in ${totalTime}`);
+    console.log('All Records:', COMPLETION_RECORDS);
+
+    res.json({ success: true, message: 'Completion recorded!' });
 });
 
 app.listen(PORT, () => {

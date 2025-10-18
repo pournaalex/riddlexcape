@@ -286,8 +286,8 @@ h4 { font-size: 1.1em; }
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.1s, box-shadow 0.1s;
-    box-shadow: 0 0 3px rgba(0, 255, 255, 0.2); /* Subtle button glow */
-}
+    box-shadow: 0 0 3px rgba(0, 255, 255, 0.2); 
+    position: relative;}
 
 .calc-button.working {
     background-color: #3a005a; /* Dark purple buttons */
@@ -397,4 +397,36 @@ h4 { font-size: 1.1em; }
     h1 {
         font-size: 2.2em;
     }
+}
+
+/* CALCULATOR KEY EXHAUSTED STATE */
+.calc-button.exhausted {
+    background-color: #580000; /* Darker red/maroon to show exhaustion */
+    color: #f0f0f0;
+    cursor: not-allowed;
+    text-decoration: none;
+    opacity: 0.8;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.4);
+}
+
+.usage-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 0.7em;
+    font-weight: bold;
+    color: var(--text-dark);
+    background-color: var(--accent-glow);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.7);
+}
+
+.calc-button.exhausted .usage-count {
+    background-color: var(--error-color);
+    color: var(--text-light);
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
 }

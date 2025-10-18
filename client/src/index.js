@@ -1,19 +1,19 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css'; // Import the global CSS file
+// 1. IMPORT BrowserRouter from react-router-dom
+import { BrowserRouter } from 'react-router-dom'; 
+import './index.css'; 
 import App from './App';
 
 // Find the root element from the index.html file
 const container = document.getElementById('root');
-const root = createRoot(container); // Create a React root for concurrent mode
+const root = createRoot(container); 
 
-// Render the main App component, which contains the routing logic
-// and all other pages and components.
+// 2. Wrap the entire application in <BrowserRouter>
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
-
-// Note: If you used an older version of React/create-react-app, 
-// the code might use ReactDOM.render(), but createRoot is the modern standard.
