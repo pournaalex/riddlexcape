@@ -5,24 +5,34 @@ import ProgressBar from '../components/ProgressBar';
 // --- CONFIG ---
 const GAME_ID = 'broken-calc';
 
-// Adjusted limits to allow a feasible solution (e.g., (5 * 5 * 2) - 5 - 2 - 1 = 42)
 const KEY_LIMITS = {
-    1: 1,   // Key '1' must be used exactly 1 time
-    2: 2,   // Key '2' must be used exactly 2 times
-    5: 3,   // Key '5' must be used exactly 3 times
-    '+': 0, // Operator '+' disabled
-    '-': 3, // Operator '-' must be used twice
-    '*': 2, // Operator '*' must be used twice
+    1: 1,   
+    2: 2,   
+    5: 3,   
+    '+': 0, 
+    '-': 2, 
+    '*': 2, 
 };
-const WORKING_KEYS = [1, 2, 5, '+', '-', '*']; 
-const BROKEN_KEYS = [3, 4, 6, 7, 8, 9, 0, '/']; 
-const FINAL_CODE = "MATH-WIZ-BEEP"; 
+const FINAL_CODE = "BETA"; 
 const TARGET_NUMBER = 42;
+const ALL_KEYS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '+', '-', '*', '/'];
 
+// Helper function to check if a key is intended to be broken based on limits
+const isStandardBrokenKey = (key) => KEY_LIMITS[key] === undefined && [3, 4, 6, 7, 8, 9, 0, '/'].includes(key);
 
 function BrokenCalculator(props) {
-    const { username, isGameOver, completeGame } = props;
+    const { username, isGameOver, completeGame, timeRemaining, formatTime } = props; 
+    
     const navigate = useNavigate(); 
+    
+    // --- Defensive Check: If no username, abort rendering immediately ---
+    if (!username) {
+        navigate('/');
+        return null; 
+    }
+    // The component WILL NOT RENDER PAST THIS POINT unless 'username' is truthy.
+    
+    // --- Storage Key is NOW SAFE to define ---
     const USER_STORAGE_KEY = `riddlescapeProgress_${username}`; 
 
     const [progress, setProgress] = useState(0); 
@@ -31,27 +41,48 @@ function BrokenCalculator(props) {
     const [currentResult, setCurrentResult] = useState(null);
     const [message, setMessage] = useState('Enter an expression. Limited uses apply!');
     const [score, setScore] = useState(0); 
-    const [usageCount, setUsageCount] = useState(KEY_LIMITS);
+    // State initialization is now safe because 'KEY_LIMITS' is a static object.
+    const [usageCount, setUsageCount] = useState(KEY_LIMITS); 
 
-    // --- LOGIC TO RESET PROGRESS AND SCORE ON EVERY ENTRY ---
+    // --- EFFECT 1: Redirect on Time Out ---
     useEffect(() => {
-        if (!username) { 
-            navigate('/'); 
-            return;
+        if (isGameOver) {
+            navigate('/');
+        }
+    }, [isGameOver, navigate]);
+    
+    // --- EFFECT 2: Reset on Entry ---
+    // Note: All dependencies here are stable now that we have the initial null check.
+    useEffect(() => {
+        
+        const storedProgress = localStorage.getItem(USER_STORAGE_KEY);
+        let reset = true;
+        
+        // This logic prevents the infinite loop/crash by ensuring the reset only happens once per mount
+        if (storedProgress) {
+            try {
+                const parsed = JSON.parse(storedProgress);
+                // If the game is already complete in storage, we shouldn't reset, but force the reset anyway for a new attempt.
+                reset = true; 
+            } catch (e) {
+                console.error("Storage error on load:", e);
+            }
         }
         
-        const storedProgress = JSON.parse(localStorage.getItem(USER_STORAGE_KEY)) || {};
-        storedProgress[GAME_ID] = { title: 'Broken Calculator', progress: 0, score: 0 };
-        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(storedProgress));
+        if (reset) {
+            const storedProgress = JSON.parse(localStorage.getItem(USER_STORAGE_KEY)) || {};
+            storedProgress[GAME_ID] = { title: 'Broken Calculator', progress: 0, score: 0 };
+            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(storedProgress));
 
-        setProgress(0);
-        setIsCompleted(false);
-        setUsageCount(KEY_LIMITS); // Reset usage counts
-        setDisplay('');
-        setCurrentResult(null);
-        setMessage('Enter an expression. Limited uses apply!');
+            setProgress(0);
+            setIsCompleted(false);
+            setUsageCount(KEY_LIMITS); 
+            setDisplay('');
+            setCurrentResult(null);
+            setMessage('Enter an expression. Limited uses apply!');
+        }
 
-    }, [username, USER_STORAGE_KEY]);
+    }, [USER_STORAGE_KEY]);
     
     // --- Handlers ---
     
@@ -59,6 +90,11 @@ function BrokenCalculator(props) {
         if (isCompleted || isGameOver) return;
         
         const stringValue = String(value);
+
+        if (KEY_LIMITS[stringValue] === 0) { 
+            setMessage(`Key '${stringValue}' is disabled.`);
+            return;
+        }
 
         if (usageCount[stringValue] !== undefined) {
             if (usageCount[stringValue] <= 0) {
@@ -118,7 +154,7 @@ function BrokenCalculator(props) {
         setDisplay('');
         setCurrentResult(null);
         setMessage('Enter an expression. Limited uses apply!');
-        setUsageCount(KEY_LIMITS); // Reset all usage counts to limits!
+        setUsageCount(KEY_LIMITS); 
     };
 
     const completeGameAction = (finalResult) => {
@@ -141,17 +177,28 @@ function BrokenCalculator(props) {
     };
 
     // --- Render Logic ---
+    
+    const renderTimer = () => (
+        <div className="timer-display-game">
+            <span className={timeRemaining <= 60 ? 'timer-critical' : 'timer-normal'}>
+                {formatTime(timeRemaining)}
+            </span>
+        </div>
+    );
 
-    const renderButton = (value, isDisabled = false) => {
+
+    const renderButton = (value) => {
         const stringValue = String(value);
         const remainingUses = usageCount[stringValue];
         
+        const isBrokenOrDisabled = isStandardBrokenKey(value) || KEY_LIMITS[stringValue] === 0;
+
         const isLimitReached = remainingUses !== undefined && remainingUses <= 0;
-        const buttonDisabled = isDisabled || isCompleted || isGameOver || isLimitReached;
+        const buttonDisabled = isCompleted || isGameOver || isLimitReached || isBrokenOrDisabled;
 
         const label = stringValue; 
 
-        const buttonClass = isDisabled 
+        const buttonClass = isBrokenOrDisabled
             ? 'broken' 
             : (isLimitReached ? 'exhausted' : 'working');
 
@@ -163,7 +210,7 @@ function BrokenCalculator(props) {
                 className={`calc-button ${buttonClass}`}
             >
                 {label}
-                {/* Render usage count as a small floating span for aesthetics */}
+                {/* Render usage count only if it's a working/limited key */}
                 {remainingUses !== undefined && (
                     <span className="usage-count">{remainingUses}</span>
                 )}
@@ -171,13 +218,12 @@ function BrokenCalculator(props) {
         );
     }
     
-    const isDisabled = isCompleted || isGameOver;
-
     return (
         <div className="game-page-container">
+            {renderTimer()} 
             <h2>Broken Calculator 💻</h2>
             <p className="user-note">
-                <span style={{color: 'var(--accent-glow)'}}>TARGET: {TARGET_NUMBER}</span>. Use each key wisely!
+                <span style={{color: 'var(--accent-glow)'}}>TARGET: {TARGET_NUMBER}</span>. Code to next game: **{FINAL_CODE}**
             </p>
             <ProgressBar percent={progress} label="Your Game Progress" />
             
@@ -190,24 +236,30 @@ function BrokenCalculator(props) {
                         {currentResult !== null && <div className="result">{currentResult}</div>}
                     </div>
 
-                    {/* NEW KEYPAD STRUCTURE FOR CSS GRID COMPATIBILITY */}
                     <div className="keypad">
-                        {/* Row 1: 7, 8, 9, / (All broken) */}
-                        {BROKEN_KEYS.slice(2, 6).map(key => renderButton(key, true))} 
-                        
-                        {/* Row 2: 4, 6, * (4 and 6 broken, * working) */}
-                        {BROKEN_KEYS.slice(0, 2).map(key => renderButton(key, true))} 
-                        {renderButton('*', false)}
-                        {renderButton('-', false)}
-                        
-                        {/* Row 3: 1, 2, 5, + (All working) */}
-                        {WORKING_KEYS.filter(k => [1, 2, 5].includes(k)).map(key => renderButton(key, false))}
-                        {renderButton('+', false)}
+                        {/* ROW 1: 7, 8, 9, / */}
+                        {renderButton(7)}
+                        {renderButton(8)}
+                        {renderButton(9)}
+                        {renderButton('/')}
 
-                        {/* Row 4: 3, 0, C, = (3, 0 broken) */}
-                        {BROKEN_KEYS.slice(6, 8).map(key => renderButton(key, true))} 
-                        <button onClick={handleClear} className="calc-button special" disabled={isDisabled}>C</button>
-                        <button onClick={handleCalculate} className="calc-button equals" disabled={isDisabled || display.length === 0}>=</button>
+                        {/* ROW 2: 4, 5, 6, * */}
+                        {renderButton(4)}
+                        {renderButton(5)}
+                        {renderButton(6)}
+                        {renderButton('*')}
+                        
+                        {/* ROW 3: 1, 2, 3, - */}
+                        {renderButton(1)}
+                        {renderButton(2)}
+                        {renderButton(3)}
+                        {renderButton('-')}
+
+                        {/* ROW 4: 0, C, =, + (Special layout) */}
+                        {renderButton(0)}
+                        <button onClick={handleClear} className="calc-button special" disabled={isCompleted || isGameOver}>C</button>
+                        <button onClick={handleCalculate} className="calc-button equals" disabled={isCompleted || isGameOver || display.length === 0}>=</button>
+                        {renderButton('+')}
                     </div>
                 </div>
             </div>

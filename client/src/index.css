@@ -272,22 +272,29 @@ h4 { font-size: 1.1em; }
     flex-shrink: 0; 
 }
 
+/* BROKEN CALCULATOR STYLES */
+/* ... (Keep existing styles above this block) ... */
+
 .keypad {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    /* ENSURE A PURE 4x4 GRID */
+    grid-template-columns: repeat(4, 1fr); 
     gap: 8px;
 }
 
+/* Ensure ALL calc-button elements are set up for grid positioning */
 .calc-button {
-    padding: 15px;
-    font-size: 1.2em;
-    font-family: var(--font-digital);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.1s, box-shadow 0.1s;
-    box-shadow: 0 0 3px rgba(0, 255, 255, 0.2); 
-    position: relative;}
+    /* ... (Keep padding, font, position: relative, etc. the same) ... */
+    height: 60px; 
+    /* NEW: Remove span from standard buttons */
+    grid-column: span 1; 
+}
+
+/* Specific styling for the wide equals button */
+.calc-button.equals {
+    /* Ensure the equals button only spans 2 columns, leaving room for + or C */
+    grid-column: span 2; 
+}
 
 .calc-button.working {
     background-color: #3a005a; /* Dark purple buttons */
@@ -429,4 +436,34 @@ h4 { font-size: 1.1em; }
     background-color: var(--error-color);
     color: var(--text-light);
     box-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+}
+
+/* TIMER ON GAME PAGE */
+.timer-display-game {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 15px;
+    background-color: #2a0340; /* Same as card background */
+    border: 1px solid var(--border-glow);
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+    font-family: var(--font-digital);
+    font-size: 1.2em;
+    z-index: 100;
+}
+
+.timer-display-game .timer-critical {
+    color: var(--error-color);
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+}
+
+.timer-display-game .timer-normal {
+    color: var(--accent-glow);
+}
+
+/* Ensure the main container has relative positioning for the absolute timer */
+.game-page-container {
+    position: relative; /* CRITICAL FOR ABSOLUTE TIMER PLACEMENT */
+    /* ... rest of existing styles ... */
 }
