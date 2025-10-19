@@ -269,7 +269,7 @@ function BrokenCalculator(props) {
                     onClick={handleReturnHome} 
                     className="return-home-button"
                  >
-                    🔙 Return to RiddlEscape Home
+                    🔙 Return to RiddleXcape Home
                  </button>
             </div>
 
