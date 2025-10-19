@@ -10,7 +10,7 @@ const KEY_LIMITS = {
     2: 2,   
     5: 3,   
     '+': 0, 
-    '-': 2, 
+    '-': 3, 
     '*': 2, 
 };
 const FINAL_CODE = "BETA"; 

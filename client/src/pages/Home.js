@@ -5,10 +5,12 @@ import ProgressBar from '../components/ProgressBar';
 
 const API_BASE_URL = 'http://localhost:5000';
 
-// Define the initial state structure with the new Painted Cube Challenge
+// Define the initial state structure with the new game
 const INITIAL_GAME_PROGRESS = {
     'broken-calc': { title: 'Broken Calculator', progress: 0, score: 0 },
-    'painted-cube': { title: 'Painted Cube Challenge', progress: 0, score: 0 } // NEW GAME
+    'painted-cube': { title: 'Painted Cube Challenge', progress: 0, score: 0 },
+    'invisible-maze': { title: 'Invisible Maze', progress: 0, score: 0 },
+    'mirror-typing': { title: 'Mirror Typing', progress: 0, score: 0 } // NEW GAME
 };
 
 // Home component now receives global state props from App.js
@@ -39,8 +41,6 @@ function Home(props) {
             try {
                 const parsed = JSON.parse(storedProgress);
                 currentProgress = { 
-                    // CRITICAL: Merge stored data with the new INITIAL_GAME_PROGRESS 
-                    // structure to ensure the new game appears on the list.
                     ...INITIAL_GAME_PROGRESS, 
                     ...parsed 
                 };

@@ -2,12 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './pages/Home';
 import BrokenCalculator from './pages/BrokenCalculator';
-import PaintedCubeChallenge from './pages/PaintedCubeChallenge'; // NEW IMPORT
+import PaintedCubeChallenge from './pages/PaintedCubeChallenge';
+import InvisibleMaze from './pages/InvisibleMaze';
+import MirrorTyping from './pages/MirrorTyping'; // NEW IMPORT
 
 // --- CONFIGURATION ---
 const MAX_TIME_MINUTES = 15;
 // ADD THE NEW GAME ID
-const GAME_IDS = ['broken-calc', 'painted-cube']; 
+const GAME_IDS = ['broken-calc', 'painted-cube', 'invisible-maze', 'mirror-typing']; 
 
 function App() {
     const navigate = useNavigate(); 
@@ -17,7 +19,7 @@ function App() {
     const [timeRemaining, setTimeRemaining] = useState(MAX_TIME_MINUTES * 60);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
     
-    // Tracks completion state: { 'broken-calc': false, 'painted-cube': false }
+    // Tracks completion state
     const [gameCompletion, setGameCompletion] = useState(
         GAME_IDS.reduce((acc, id) => ({ ...acc, [id]: false }), {})
     );
@@ -100,11 +102,17 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home {...globalState} />} />
                 
-                {/* Existing Game Route */}
+                {/* Existing Game Route 1 */}
                 <Route path="/broken-calc" element={<BrokenCalculator {...globalState} gameId="broken-calc" />} />
                 
-                {/* NEW GAME ROUTE */}
+                {/* Existing Game Route 2 */}
                 <Route path="/painted-cube" element={<PaintedCubeChallenge {...globalState} gameId="painted-cube" />} />
+                
+                {/* Existing Game Route 3 */}
+                <Route path="/invisible-maze" element={<InvisibleMaze {...globalState} gameId="invisible-maze" />} />
+                
+                {/* NEW GAME ROUTE 4 */}
+                <Route path="/mirror-typing" element={<MirrorTyping {...globalState} gameId="mirror-typing" />} />
             </Routes>
         </div>
     );

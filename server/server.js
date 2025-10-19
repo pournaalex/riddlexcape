@@ -9,8 +9,10 @@ const COMPLETION_RECORDS = [];
 
 // Access Codes and corresponding game routes
 const ACCESS_CODES = {
-    'CALCFAIL': '/broken-calc', // Code to unlock the Broken Calculator
-    'MATH-WIZ-BEEP': '/painted-cube'
+    'CALCFAIL': '/broken-calc', 
+    'BETA': '/painted-cube', 
+    'CUBE-SOLVED-36': '/invisible-maze',
+    'MAZE-RUNNER-FINISH': '/mirror-typing' // NEW: Access code from Maze unlocks Mirror Typing
 };
 
 // Middleware
@@ -33,7 +35,7 @@ app.post('/api/validate-code', (req, res) => {
     }
 });
 
-// --- NEW API ROUTE for Submitting Final Score ---
+// --- API ROUTE for Submitting Final Score ---
 app.post('/api/submit-score', (req, res) => {
     const { username, totalTime, finalScore } = req.body;
 
