@@ -8,8 +8,8 @@ const FINAL_CODE = "SEATS4U";
 const ACCESS_CODE_FROM = "R3V3RB";
 
 // The required input that results in "ECHO"
-const CORRECT_REVERSED_INPUT = "OHCE"; 
-const RIDDLE = "SEVLA EES TUOHTIW, SEVLA SEES TI. YLLAUSIV TIHSGNIUGNITSID NAC UOY NEHW SUTATS YM YDUTS.";
+const CORRECT_REVERSED_INPUT = "LEVEL"; 
+const RIDDLE = "?I MA TAHW .THGIEH LAUQE ,TALF A EBIRCSID I DNA ,SDRACKWAB DNA SDRAWROF EMAS EHT DAER I .SRETTEL EVIF HTIW DROW ELGNIS A MA I";
 
 function MirrorTyping(props) {
     const { username, isGameOver, completeGame, timeRemaining, formatTime } = props;
@@ -141,7 +141,7 @@ function MirrorTyping(props) {
                         value={rawInput}
                         onChange={handleInputChange}
                         disabled={isDisabled}
-                        maxLength={CORRECT_REVERSED_INPUT.length}
+                        
                         style={{padding: '10px', width: '100%', textAlign: 'center', backgroundColor: '#20023a', color: 'var(--text-primary)', border: '1px solid var(--border-glow)', fontSize: '1.2em'}}
                     />
                     
