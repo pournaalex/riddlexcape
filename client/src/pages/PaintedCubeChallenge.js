@@ -167,8 +167,8 @@ function PaintedCubeChallenge(props) {
             {isCompleted && (
                 <div className="completion-message">
                     <h3>🎉 Challenge Complete! (Score: {score})</h3>
-                    <p>Your Completion Code is: <strong>{FINAL_CODE}</strong></p>
-                    <p>Go back to home to submit your final time!</p>
+                 
+                    <p>Go back to home to finish the game!</p>
                 </div>
             )}
         </div>

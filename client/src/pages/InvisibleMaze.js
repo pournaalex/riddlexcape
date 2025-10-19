@@ -5,7 +5,7 @@ import ProgressBar from '../components/ProgressBar';
 // --- CONFIG ---
 const GAME_ID = 'invisible-maze';
 const FINAL_CODE = "MAZE-RUNNER-FINISH"; 
-const ACCESS_CODE_FROM = "CUBE-SOLVED-36";
+const ACCESS_CODE_FROM = "JET2MAZE";
 
 const MAZE_SIZE = 400; 
 const CELL_SIZE = 40;
@@ -367,8 +367,8 @@ function InvisibleMaze(props) {
             {isCompleted && (
                 <div className="completion-message">
                     <h3>🎉 Challenge Complete! (Score: {score})</h3>
-                    <p>Your Completion Code is: <strong>{FINAL_CODE}</strong></p>
-                    <p>Go back to home to submit your final time!</p>
+                  
+                    <p>Go back to home to finish the game!</p>
                 </div>
             )}
         </div>

@@ -5,7 +5,7 @@ import ProgressBar from '../components/ProgressBar';
 // --- CONFIG ---
 const GAME_ID = 'mirror-typing';
 const FINAL_CODE = "ESCAPE-COMPLETE-4"; 
-const ACCESS_CODE_FROM = "MAZE-RUNNER-FINISH";
+const ACCESS_CODE_FROM = "R3V3RB";
 
 // The required input that results in "ECHO"
 const CORRECT_REVERSED_INPUT = "OHCE"; 
@@ -73,6 +73,7 @@ function MirrorTyping(props) {
     };
 
     const completeGameAction = () => {
+        // Step 1: Set local state to completed
         setProgress(100);
         setIsCompleted(true);
         const finalScore = 100; 
@@ -80,8 +81,10 @@ function MirrorTyping(props) {
         
         setMessage(`SUCCESS! Answer: ECHO. Proceed to the next step!`);
 
+        // Step 2: Update global App state to mark game as done
         completeGame(GAME_ID); 
 
+        // Step 3: Update local storage for score/progress tracking
         const storedProgress = JSON.parse(localStorage.getItem(USER_STORAGE_KEY)) || {};
         storedProgress[GAME_ID] = { title: 'Mirror Typing', progress: 100, score: finalScore };
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(storedProgress));
@@ -166,8 +169,8 @@ function MirrorTyping(props) {
             {isCompleted && (
                 <div className="completion-message">
                     <h3>🎉 Challenge Complete! (Score: 100)</h3>
-                    <p>Your FINAL CODE is: <strong>{FINAL_CODE}</strong></p>
-                    <p>Go back to home to submit your score!</p>
+                 
+                    <p>Go back to home to finish the game!</p>
                 </div>
             )}
         </div>

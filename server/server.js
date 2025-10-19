@@ -11,8 +11,8 @@ const COMPLETION_RECORDS = [];
 const ACCESS_CODES = {
     'CALCFAIL': '/broken-calc', 
     'BETA': '/painted-cube', 
-    'CUBE-SOLVED-36': '/invisible-maze',
-    'MAZE-RUNNER-FINISH': '/mirror-typing' // NEW: Access code from Maze unlocks Mirror Typing
+    'JET2MAZE': '/invisible-maze',
+    'R3V3RB': '/mirror-typing' // NEW: Access code from Maze unlocks Mirror Typing
 };
 
 // Middleware
