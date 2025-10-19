@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProgressBar from '../components/ProgressBar';
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://riddlexcape.onrender.com';
 
-// Define the initial state structure with the new game
+// Define the initial state structure with all 5 games
 const INITIAL_GAME_PROGRESS = {
     'broken-calc': { title: 'Broken Calculator', progress: 0, score: 0 },
     'painted-cube': { title: 'Painted Cube Challenge', progress: 0, score: 0 },
     'invisible-maze': { title: 'Invisible Maze', progress: 0, score: 0 },
-    'seating-arrangement': { title: 'Seating Arrangement', progress: 0, score: 0 } // NEW GAME
+    'mirror-typing': { title: 'Mirror Typing', progress: 0, score: 0 }, 
+    'seating-arrangement': { title: 'Seating Arrangement', progress: 0, score: 0 },
 };
 
 // Home component now receives global state props from App.js
@@ -32,7 +33,6 @@ function Home(props) {
 
     // Memoize the score calculation outside of the component render cycle
     const calculateGameProgress = useCallback(() => {
-        // ... (rest of function is unchanged) ...
         const storedProgressKey = username ? `riddlescapeProgress_${username}` : null;
         const storedProgress = storedProgressKey ? localStorage.getItem(storedProgressKey) : null;
         
@@ -60,9 +60,16 @@ function Home(props) {
         }
     }, [username, calculateGameProgress]); 
 
+    // --- NEW: Check if Seating Arrangement is finished based on global state ---
+    const isSeatingArrangementComplete = gameCompletion['seating-arrangement'] === true;
+    
+    // Determine if the submission button should be visible (Dual Trigger)
+    const canSubmit = isGameOver || allGamesComplete || isSeatingArrangementComplete;
+
+
     // Calculate overall score and progress based on current state
     const totalScore = Object.values(gameProgress).reduce((sum, game) => sum + (game.score || 0), 0);
-    const totalMaxScore = GAME_IDS.length * 100; // Correctly adapts to 4 games
+    const totalMaxScore = GAME_IDS.length * 100; 
     const overallProgress = (totalScore / totalMaxScore) * 100;
     
     // --- Handlers (Unchanged) ---
@@ -87,9 +94,16 @@ function Home(props) {
             return;
         }
         
+        const sanitizedCode = accessCode.toUpperCase().trim();
+        
+        if (!sanitizedCode) {
+            setError('Please enter an access code.');
+            return;
+        }
+        
         try {
             const response = await axios.post(`${API_BASE_URL}/api/validate-code`, {
-                code: accessCode
+                code: sanitizedCode
             });
 
             if (response.data.success) {
@@ -148,7 +162,7 @@ function Home(props) {
     };
 
 
-    // --- Render Logic (Unchanged) ---
+    // --- Render Logic (Updated) ---
     
     const renderTimer = () => (
         <div className="timer-display">
@@ -157,19 +171,20 @@ function Home(props) {
     );
     
     const renderSubmissionButton = () => {
-        if (!isGameOver && !allGamesComplete) return null; 
+        if (!canSubmit) return null; // Use the combined logic here
         
-        // Determine the reason for submission prompt
         let reason = '';
         if (allGamesComplete) {
             reason = 'All puzzles solved! Submit your score now.';
+        } else if (isSeatingArrangementComplete) {
+            reason = 'Seating Arrangement complete. Submit score or continue.';
         } else if (isGameOver) {
             reason = 'Time limit reached! Submit final score.';
         }
 
         const statusMessage = allGamesComplete 
-            ? 'SUBMIT Final Score' 
-            : 'TIME IS UP! SUBMIT';
+            ? 'SUBMIT FINAL SCORE' 
+            : 'SUBMIT NOW (Partial Completion)';
             
         return (
             <div className="submit-section">
@@ -191,10 +206,13 @@ function Home(props) {
 
 
     if (!isTimerRunning && !isGameOver) {
-        // --- Username Input Screen ---
+        // --- Username Input Screen (Unchanged) ---
         return (
             <div className="home-container start-screen">
-                <h1>RiddleXcape 🔑</h1>
+                <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+                    <h1>RiddleXcape 🔑</h1>
+                    
+                </div>
                 <h2>IEEE SIGHT GECBH welcomes you, Agent. You have {MAX_TIME_MINUTES} minutes to solve the puzzles.</h2>
                 <form onSubmit={handleStartGame} className="code-entry-form" style={{ marginTop: '50px' }}>
                     <input
@@ -211,9 +229,13 @@ function Home(props) {
         );
     }
     
-    // --- Game In Progress Screen ---
+    // --- Game In Progress Screen (Unchanged) ---
     return (
         <div className="home-container">
+            <div style={{ textAlign: 'center', marginBottom: '15px' }}>
+                <h1>RiddleXscape 🔑</h1>
+                
+            </div>
             {renderTimer()}
             <p className="user-id-display">Agent: {username}</p>
             <div className="score-tracker">
@@ -237,7 +259,7 @@ function Home(props) {
             {renderSubmissionButton()}
 
             {/* Always show the Reset Button if the game is over or solved */}
-            {(isGameOver || allGamesComplete) && (
+            {(isGameOver || canSubmit) && ( // Check if submission is possible to show reset
                 <div style={{ textAlign: 'center', marginTop: '20px' }}>
                     <button onClick={handleFullReset} className="reset-button">
                         Start New RiddlEscape 🔄

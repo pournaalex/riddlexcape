@@ -4,7 +4,7 @@ import ProgressBar from '../components/ProgressBar';
 
 // --- CONFIG ---
 const GAME_ID = 'mirror-typing';
-const FINAL_CODE = "ESCAPE-COMPLETE-4"; 
+const FINAL_CODE = "SEATS4U"; 
 const ACCESS_CODE_FROM = "R3V3RB";
 
 // The required input that results in "ECHO"

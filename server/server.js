@@ -20,7 +20,7 @@ const ACCESS_CODES = {
     'R3V3RB': '/mirror-typing',
     
     // Code received from Mirror Typing -> Unlocks Seating Arrangement (Final Game)
-    'SEATS4U': '/seating-arrangement',
+    'SEATS4U': '/seating-arrangement'
 };
 
 // Middleware

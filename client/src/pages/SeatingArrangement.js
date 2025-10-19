@@ -4,12 +4,11 @@ import ProgressBar from '../components/ProgressBar';
 
 // --- CONFIG ---
 const GAME_ID = 'seating-arrangement';
-const FINAL_CODE = "RIDDLE-MASTER-5"; 
+// REMOVED: FINAL_CODE = "ESCAPE-COMPLETE-5"; (It is no longer needed)
 const ACCESS_CODE_FROM = "SEATS4U"; // Access code from Mirror Typing
 
 const QUESTION = "Five friends are sitting in a row. Anna is to the left of Bob but to the right of Carol. Dave is to the right of Bob. Emily is between Bob and Dave. Who is sitting at the far left?";
 const ANSWER_OPTIONS = "a) Anna, b) Bob, c) Carol, d) Dave.";
-// Correct solution is Carol (C A B E D)
 const CORRECT_ANSWER = 'CAROL'; 
 
 function SeatingArrangement(props) {
@@ -62,7 +61,6 @@ function SeatingArrangement(props) {
     // --- Input Change Handler ---
     const handleInputChange = (e) => {
         setTextInput(e.target.value);
-        // Update progress based on input length (simple visual feedback)
         setProgress(Math.min(99, e.target.value.length * 15));
     };
 
@@ -75,6 +73,7 @@ function SeatingArrangement(props) {
         
         setMessage(`SUCCESS! The far-left person is Carol.`);
 
+        // This call updates App.js, which sees all 5 games are complete, stopping the timer!
         completeGame(GAME_ID); 
 
         const storedProgress = JSON.parse(localStorage.getItem(USER_STORAGE_KEY)) || {};
@@ -144,8 +143,8 @@ function SeatingArrangement(props) {
 
             {isCompleted && (
                 <div className="completion-message">
-                    <h3>🎉 Challenge Complete! (Score: 100)</h3>
-                    <p>Go back to home to submit your score!</p>
+                    <h3>🎉 ESCAPE COMPLETE!</h3>
+                    <p>Return to the home page to submit your final score!</p>
                 </div>
             )}
         </div>

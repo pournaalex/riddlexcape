@@ -7,10 +7,11 @@ import InvisibleMaze from './pages/InvisibleMaze';
 import MirrorTyping from './pages/MirrorTyping'; // NEW IMPORT
 import SeatingArrangement from './pages/SeatingArrangement';
 
+
 // --- CONFIGURATION ---
 const MAX_TIME_MINUTES = 15;
 // ADD THE NEW GAME ID
-const GAME_IDS = ['broken-calc', 'painted-cube', 'invisible-maze', 'mirror-typing']; 
+const GAME_IDS = ['broken-calc', 'painted-cube', 'invisible-maze', 'mirror-typing', 'seating-arrangement']; 
 
 function App() {
     const navigate = useNavigate(); 
@@ -115,6 +116,7 @@ function App() {
                 {/* NEW GAME ROUTE 4 */}
                 <Route path="/mirror-typing" element={<MirrorTyping {...globalState} gameId="mirror-typing" />} />
                <Route path="/seating-arrangement" element={<SeatingArrangement {...globalState} gameId="seating-arrangement" />} />
+               
             </Routes>
         </div>
     );
