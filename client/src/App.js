@@ -5,6 +5,7 @@ import BrokenCalculator from './pages/BrokenCalculator';
 import PaintedCubeChallenge from './pages/PaintedCubeChallenge';
 import InvisibleMaze from './pages/InvisibleMaze';
 import MirrorTyping from './pages/MirrorTyping'; // NEW IMPORT
+import SeatingArrangement from './pages/SeatingArrangement';
 
 // --- CONFIGURATION ---
 const MAX_TIME_MINUTES = 15;
@@ -113,6 +114,7 @@ function App() {
                 
                 {/* NEW GAME ROUTE 4 */}
                 <Route path="/mirror-typing" element={<MirrorTyping {...globalState} gameId="mirror-typing" />} />
+               <Route path="/seating-arrangement" element={<SeatingArrangement {...globalState} gameId="seating-arrangement" />} />
             </Routes>
         </div>
     );

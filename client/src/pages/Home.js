@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProgressBar from '../components/ProgressBar';
 
-const API_BASE_URL = 'https://riddlexcape.onrender.com';
+const API_BASE_URL = 'http://localhost:5000';
 
 // Define the initial state structure with the new game
 const INITIAL_GAME_PROGRESS = {
     'broken-calc': { title: 'Broken Calculator', progress: 0, score: 0 },
     'painted-cube': { title: 'Painted Cube Challenge', progress: 0, score: 0 },
     'invisible-maze': { title: 'Invisible Maze', progress: 0, score: 0 },
-    'mirror-typing': { title: 'Mirror Typing', progress: 0, score: 0 } // NEW GAME
+    'seating-arrangement': { title: 'Seating Arrangement', progress: 0, score: 0 } // NEW GAME
 };
 
 // Home component now receives global state props from App.js
@@ -32,6 +32,7 @@ function Home(props) {
 
     // Memoize the score calculation outside of the component render cycle
     const calculateGameProgress = useCallback(() => {
+        // ... (rest of function is unchanged) ...
         const storedProgressKey = username ? `riddlescapeProgress_${username}` : null;
         const storedProgress = storedProgressKey ? localStorage.getItem(storedProgressKey) : null;
         
@@ -61,10 +62,10 @@ function Home(props) {
 
     // Calculate overall score and progress based on current state
     const totalScore = Object.values(gameProgress).reduce((sum, game) => sum + (game.score || 0), 0);
-    const totalMaxScore = GAME_IDS.length * 100; // Adaptable to number of games
+    const totalMaxScore = GAME_IDS.length * 100; // Correctly adapts to 4 games
     const overallProgress = (totalScore / totalMaxScore) * 100;
     
-    // --- Handlers ---
+    // --- Handlers (Unchanged) ---
     
     const handleStartGame = (e) => {
         e.preventDefault();
@@ -147,7 +148,7 @@ function Home(props) {
     };
 
 
-    // --- Render Logic ---
+    // --- Render Logic (Unchanged) ---
     
     const renderTimer = () => (
         <div className="timer-display">
@@ -193,8 +194,8 @@ function Home(props) {
         // --- Username Input Screen ---
         return (
             <div className="home-container start-screen">
-                <h1>RiddlEscape 🔑</h1>
-                <h2>Welcome, Agent. You have {MAX_TIME_MINUTES} minutes to solve the puzzles.</h2>
+                <h1>RiddleXcape 🔑</h1>
+                <h2>IEEE SIGHT GECBH welcomes you, Agent. You have {MAX_TIME_MINUTES} minutes to solve the puzzles.</h2>
                 <form onSubmit={handleStartGame} className="code-entry-form" style={{ marginTop: '50px' }}>
                     <input
                         type="text"
@@ -226,9 +227,9 @@ function Home(props) {
                     placeholder="Enter Game Access Code"
                     value={accessCode}
                     onChange={(e) => setAccessCode(e.target.value)}
-                    disabled={isGameOver || allGamesComplete}
+                    disabled={isGameOver}
                 />
-                <button type="submit" disabled={isGameOver || allGamesComplete}>Unlock Game</button>
+                <button type="submit" disabled={isGameOver}>Unlock Game</button>
                 {error && <p className="error-message">{error}</p>}
             </form>
 

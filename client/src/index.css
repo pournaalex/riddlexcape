@@ -467,3 +467,67 @@ h4 { font-size: 1.1em; }
     position: relative; /* CRITICAL FOR ABSOLUTE TIMER PLACEMENT */
     /* ... rest of existing styles ... */
 }
+
+/* SEATING ARRANGEMENT (DRAG & DROP) STYLES */
+
+.arrangement-slots-container {
+    margin: 20px auto;
+    max-width: 650px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px dashed var(--text-secondary);
+}
+
+.slot-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 0.8em;
+    color: var(--text-secondary);
+    padding: 0 5px;
+}
+
+.arrangement-area {
+    display: flex;
+    flex-wrap: wrap; /* Ensure items wrap if needed, though they shouldn't */
+    gap: 5px;
+    padding: 10px;
+    min-height: 80px; /* Provides visible area for dropping */
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.draggable-item {
+    flex-grow: 1; /* Allows items to fill space */
+    min-width: 100px; /* Minimum width for each block */
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: var(--button-bg);
+    color: var(--text-primary);
+    border-radius: 4px;
+    transition: transform 0.2s, opacity 0.2s;
+    user-select: none; /* Prevents text selection during drag */
+    font-weight: bold;
+    /* Allows dynamic ordering visual */
+    order: 0; 
+}
+
+.draggable-item.dragging {
+    opacity: 0.4; /* Fade out the element currently being dragged */
+    transform: scale(1.05);
+}
+
+.empty-drop-target {
+    min-width: 50px; 
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
+    height: 50px;
+}
+
+/* Ensure the submit button remains visible and centered */
+.submit-button.submit-success {
+    /* ... (Existing styles remain) ... */
+    max-width: 350px; 
+}

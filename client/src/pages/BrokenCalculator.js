@@ -223,7 +223,7 @@ function BrokenCalculator(props) {
             {renderTimer()} 
             <h2>Broken Calculator 💻</h2>
             <p className="user-note">
-                <span style={{color: 'var(--accent-glow)'}}>TARGET: {TARGET_NUMBER}</span>. Code to next game: **{FINAL_CODE}**
+                <span style={{color: 'var(--accent-glow)'}}>TARGET: {TARGET_NUMBER}</span>. 
             </p>
             <ProgressBar percent={progress} label="Your Game Progress" />
             

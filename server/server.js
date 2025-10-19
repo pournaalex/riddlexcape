@@ -9,10 +9,18 @@ const COMPLETION_RECORDS = [];
 
 // Access Codes and corresponding game routes
 const ACCESS_CODES = {
-    'CALCFAIL': '/broken-calc', 
+    'CALCFAIL': '/broken-calc',
+    // Code received from Broken Calc -> Unlocks Painted Cube
     'BETA': '/painted-cube', 
+    
+    // Code received from Painted Cube -> Unlocks Invisible Maze
     'JET2MAZE': '/invisible-maze',
-    'R3V3RB': '/mirror-typing' // NEW: Access code from Maze unlocks Mirror Typing
+    
+    // Code received from Invisible Maze -> Unlocks Mirror Typing
+    'R3V3RB': '/mirror-typing',
+    
+    // Code received from Mirror Typing -> Unlocks Seating Arrangement (Final Game)
+    'SEATS4U': '/seating-arrangement',
 };
 
 // Middleware
