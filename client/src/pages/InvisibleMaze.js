@@ -4,7 +4,7 @@ import ProgressBar from '../components/ProgressBar';
 
 // --- CONFIG ---
 const GAME_ID = 'invisible-maze';
-const FINAL_CODE = "MAZE-RUNNER-FINISH"; 
+const FINAL_CODE = "R3V3RB"; 
 const ACCESS_CODE_FROM = "JET2MAZE";
 
 const MAZE_SIZE = 400; 

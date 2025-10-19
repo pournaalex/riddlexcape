@@ -6,7 +6,7 @@ import ProgressBar from '../components/ProgressBar';
 const GAME_ID = 'painted-cube';
 const CUBE_SIZE = 5;
 const CORRECT_ANSWER = 36; 
-const FINAL_CODE = "CUBE-SOLVED-36"; 
+const FINAL_CODE = "JET2MAZE"; 
 const ACCESS_CODE_FROM = "BETA"; 
 
 function PaintedCubeChallenge(props) {
